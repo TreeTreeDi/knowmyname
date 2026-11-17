@@ -53,17 +53,24 @@ html[data-surface="tide"] body {
 .tide-card {
   display: grid;
   grid-template-columns: 42% 1fr;
-  background: #f7f2e7;
+  /* paper yellows with age */
+  background: color-mix(in oklab, #f7f2e7, #e2cfa6 calc(var(--age) * 70%));
   color: var(--ink);
   box-shadow: 0 30px 50px -28px rgb(60 40 10 / 0.55), 0 2px 4px rgb(60 40 10 / 0.12);
   transform: rotate(var(--tilt));
-  filter: sepia(calc(var(--age) * 0.55)) saturate(calc(1 - var(--age) * 0.45)) brightness(calc(1 + var(--age) * 0.03));
   transition: transform 0.5s var(--ease), box-shadow 0.5s;
 }
 .tide-card:hover { transform: rotate(0deg) translateY(-6px); box-shadow: 0 40px 60px -28px rgb(60 40 10 / 0.6); }
-.tide-img img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 5; }
+.tide-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 4 / 5;
+  /* sun-bleached photos: the older, the more washed out */
+  filter: sepia(calc(var(--age) * 0.6)) saturate(calc(1 - var(--age) * 0.5)) contrast(calc(1 - var(--age) * 0.18)) brightness(calc(1 + var(--age) * 0.08));
+}
 .tide-text { display: flex; flex-direction: column; padding: clamp(20px, 3vw, 36px); gap: 10px; }
-.tide-vol { font-family: var(--f-serif); font-size: clamp(36px, 4vw, 54px); line-height: 1; color: var(--accent); }
+.tide-vol { font-family: var(--f-serif); font-size: clamp(36px, 4vw, 54px); line-height: 1; color: color-mix(in oklab, var(--accent), #b8a27a calc(var(--age) * 60%)); }
 .tide-title { font-family: var(--f-cn); font-weight: 700; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.25; }
 .tide-dek { color: var(--ink-2); font-size: 15px; line-height: 1.75; }
 .tide-meta { margin-top: auto; font-size: 12px; letter-spacing: 0.1em; color: var(--ink-3); border-top: 1px solid var(--rule); padding-top: 10px; }

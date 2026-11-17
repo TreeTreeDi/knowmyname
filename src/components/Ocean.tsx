@@ -32,7 +32,7 @@ interface Preset {
 export const PRESETS: Record<Phase, Preset> = {
   dawn: { elevation: 3.2, azimuth: 197, exposure: 0.26, turbidity: 5, rayleigh: 2.4, mieCoefficient: 0.006, mieDirectionalG: 0.82, waterColor: 0x0c2433, sunColor: 0xffe2cc, clouds: 0.42, cloudDensity: 0.45, distortion: 2.4, bloom: 0.14 },
   noon: { elevation: 34, azimuth: 186, exposure: 0.36, turbidity: 2.2, rayleigh: 0.85, mieCoefficient: 0.004, mieDirectionalG: 0.78, waterColor: 0x003049, sunColor: 0xffffff, clouds: 0.34, cloudDensity: 0.4, distortion: 3.4, bloom: 0.05 },
-  dusk: { elevation: 1.4, azimuth: 168, exposure: 0.16, turbidity: 10, rayleigh: 3.2, mieCoefficient: 0.008, mieDirectionalG: 0.86, waterColor: 0x150d1c, sunColor: 0xffae70, clouds: 0.48, cloudDensity: 0.55, distortion: 3.7, bloom: 0.22 },
+  dusk: { elevation: 0.9, azimuth: 164, exposure: 0.13, turbidity: 10, rayleigh: 3.4, mieCoefficient: 0.006, mieDirectionalG: 0.86, waterColor: 0x150d1c, sunColor: 0xffae70, clouds: 0.5, cloudDensity: 0.55, distortion: 3.7, bloom: 0.1 },
   night: { elevation: 16, azimuth: 160, exposure: 0.02, turbidity: 1.2, rayleigh: 0.5, mieCoefficient: 0.002, mieDirectionalG: 0.9, waterColor: 0x01060d, sunColor: 0x9fbfff, clouds: 0.25, cloudDensity: 0.35, distortion: 2.2, bloom: 0.45 },
 };
 
@@ -52,7 +52,7 @@ export default function Ocean() {
     let disposed = false;
     let cleanup = () => {};
 
-    (async () => {
+    const start = async (forceWebGLArg: boolean): Promise<void> => {
       const THREE = await import('three/webgpu');
       const { pass } = await import('three/tsl');
       const { bloom } = await import('three/addons/tsl/display/BloomNode.js');
@@ -61,7 +61,7 @@ export default function Ocean() {
       if (disposed || !host.current) return;
 
       const el = host.current;
-      const forceWebGL = params.has('gl') || !('gpu' in navigator);
+      const forceWebGL = forceWebGLArg;
       const renderer = new THREE.WebGPURenderer({ antialias: false, forceWebGL });
       const mobile = innerWidth < 720;
       renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.25 : 1.5));
@@ -80,6 +80,14 @@ export default function Ocean() {
         return;
       }
       const backend = (renderer.backend as { isWebGPUBackend?: boolean }).isWebGPUBackend ? 'webgpu' : 'webgl2';
+      // If the GPU device goes away (driver reset, sleep, flaky software adapters), retry once on WebGL2,
+      // otherwise fall back to the static cover.
+      renderer.onDeviceLost = (info: unknown) => {
+        console.warn('[ocean] device lost', info);
+        root.dataset.ocean = 'static';
+        cleanup();
+        if (backend === 'webgpu' && !disposed) start(true).catch(() => (root.dataset.ocean = 'static'));
+      };
       root.dataset.renderer = backend;
       el.appendChild(renderer.domElement);
 
@@ -234,10 +242,16 @@ export default function Ocean() {
         removeEventListener('resize', onResize);
         removeEventListener('pointermove', onMove);
         document.removeEventListener('visibilitychange', sync);
-        renderer.dispose();
+        try {
+          renderer.dispose();
+        } catch {
+          /* already lost */
+        }
         renderer.domElement.remove();
       };
-    })().catch((err) => {
+    };
+
+    start(params.has('gl') || !('gpu' in navigator)).catch((err) => {
       console.warn('[ocean] failed', err);
       root.dataset.ocean = 'static';
     });

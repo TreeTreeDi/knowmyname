@@ -25,7 +25,11 @@ const issueDate = `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getU
       <div class="cover-strip">
         <span class="strip-vol">{volLabel(latest.data.vol)}</span>
         <span class="strip-date">{issueDate} · 第 {week} 周</span>
-        <span class="strip-sun" data-sun>上海 · 北京时间</span>
+        <nav class="cover-nav" aria-label="主导航">
+          <a href="/issues/">目录<em>Contents</em></a>
+          <a href="/archive/">潮汐归档<em>Archive</em></a>
+          <a href="/bottle/">漂流瓶<em>Bottles</em></a>
+        </nav>
         <div class="time-switch" role="group" aria-label="切换海面光线">
           {PHASES.map((p) => (
             <button type="button" data-phase={p} aria-pressed="false" title={`${PHASE_LABEL[p].zh} · ${PHASE_LABEL[p].en}`}>
@@ -40,23 +44,8 @@ const issueDate = `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getU
         <span class="mh-zh">海边周刊</span>
       </h1>
 
-      <nav class="cover-nav" aria-label="主导航">
-        <a href="/issues/">目录<em>Contents</em></a>
-        <a href="/archive/">潮汐归档<em>Archive</em></a>
-        <a href="/bottle/">漂流瓶<em>Bottles</em></a>
-      </nav>
 
-      <ol class="cover-lines" aria-label="往期">
-        {rest.slice(0, 3).map((i) => (
-          <li>
-            <a href={`/issues/${i.id}/`}>
-              <span class="cl-no">{volNum(i.data.vol)}</span>
-              <span class="cl-title">{i.data.title}</span>
-              <span class="cl-sec">{i.data.section}</span>
-            </a>
-          </li>
-        ))}
-      </ol>
+
 
       <a class="cover-story" href={`/issues/${latest.id}/`}>
         <span class="cs-kicker"><b>{volLabel(latest.data.vol)}</b> 本期特稿 · {latest.data.sectionEn}</span>
@@ -65,20 +54,34 @@ const issueDate = `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getU
         <span class="cs-cta">翻开本期 <span aria-hidden="true">→</span></span>
       </a>
 
-      <figure class="cover-print">
-        <a href={`/issues/${latest.id}/`} tabindex="-1" aria-hidden="true">
-          <Image
-            src={latest.data.cover}
-            alt={latest.data.coverAlt}
-            widths={[360, 560, 720]}
-            sizes="(max-width: 720px) 46vw, 300px"
-            loading="eager"
-            fetchpriority="high"
-            style={`view-transition-name:${vtCover(latest)}`}
-          />
-        </a>
-        <figcaption>封面 · {latest.data.coverCaption}</figcaption>
-      </figure>
+      <aside class="cover-side">
+        <p class="side-sun" data-sun>上海 · 北京时间</p>
+        <ol class="cover-lines" aria-label="往期">
+          {rest.slice(0, 3).map((i) => (
+            <li>
+              <a href={`/issues/${i.id}/`}>
+                <span class="cl-no">{volNum(i.data.vol)}</span>
+                <span class="cl-title">{i.data.title}</span>
+                <span class="cl-sec">{i.data.section}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <figure class="cover-print">
+          <a href={`/issues/${latest.id}/`} tabindex="-1" aria-hidden="true">
+            <Image
+              src={latest.data.cover}
+              alt={latest.data.coverAlt}
+              widths={[360, 560, 720]}
+              sizes="(max-width: 720px) 46vw, 300px"
+              loading="eager"
+              fetchpriority="high"
+              style={`view-transition-name:${vtCover(latest)}`}
+            />
+          </a>
+          <figcaption>封面 · {latest.data.coverCaption}</figcaption>
+        </figure>
+      </aside>
     </div>
 
     <a class="scroll-cue" href="#inside"><span>翻开</span><i aria-hidden="true"></i></a>
@@ -153,5 +156,5 @@ const issueDate = `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getU
     return `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`;
   };
   const el = document.querySelector('[data-sun]');
-  if (el) el.textContent = `上海 · 日出 ${hm(720 - 4 * (lon + ha) - eq)} · 日落 ${hm(720 - 4 * (lon - ha) - eq)}`;
+  if (el) el.textContent = `今日上海 · 日出 ${hm(720 - 4 * (lon + ha) - eq)} · 日落 ${hm(720 - 4 * (lon - ha) - eq)}`;
 </script>
