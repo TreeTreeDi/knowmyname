@@ -12,5 +12,4 @@ export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   server: { port: 4331, host: true },
   devToolbar: { enabled: false },
-  prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
 });

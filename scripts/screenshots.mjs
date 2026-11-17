@@ -69,6 +69,16 @@ for (const vp of ['desktop', 'mobile']) {
       },
     });
 }
+if (want('switch')) {
+  // Time switcher: start at dusk, click 夜晚, let the sea tween over.
+  await shoot('desktop', 'switch-dusk-to-night', '/?time=dusk', {
+    ocean: true,
+    before: async (page) => {
+      await page.click('.time-switch button[data-phase="night"]');
+      await page.waitForTimeout(4000);
+    },
+  });
+}
 if (want('vt')) {
   // Cross-document view transition: click the cover headline, grab a frame mid-flight, then the landed page.
   const ctx = await browser.newContext(viewports.desktop);
