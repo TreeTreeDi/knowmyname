@@ -48,7 +48,7 @@ html[data-time="dawn"] {
   --cover-ink: #1d2448;
   --cover-ink-2: rgb(29 36 72 / 0.72);
   --cover-rule: rgb(29 36 72 / 0.35);
-  --cover-shadow: 0 1px 30px rgb(255 235 220 / 0.6);
+  --cover-shadow: 0 1px 18px rgb(255 240 230 / 0.4);
   --sky-top: #8fa3c6;
   --sky-mid: #d9b9c4;
   --sky-low: #f6d2b8;

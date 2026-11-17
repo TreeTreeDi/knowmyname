@@ -100,5 +100,6 @@ html[data-surface="tide"] body {
   .tide-gauge { display: none; }
   .tide-card { grid-template-columns: 1fr; }
   .tide-img img { aspect-ratio: 16 / 10; }
-  .tide-item { width: 100%; }
+  .tide-item { width: 94%; }
+  .tide-card { transform: rotate(calc(var(--tilt) * 0.5)); }
 }

@@ -20,6 +20,23 @@ html[data-surface="cover"] body { background: var(--sea-ink); }
     radial-gradient(60% 18% at 50% 58%, var(--sun) 0%, transparent 60%),
     linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 36%, var(--sky-low) 57.5%, var(--sea-top) 58%, var(--sea-low) 100%);
 }
+/* real frames of the sea (scripts/capture-posters.mjs) over the gradient */
+.cover-poster { background-size: cover, cover, cover; background-position: center; }
+html[data-time="dawn"] .cover-poster { background-image: url("/posters/dawn-desktop.jpg"), none; }
+html[data-time="noon"] .cover-poster { background-image: url("/posters/noon-desktop.jpg"), none; }
+html[data-time="dusk"] .cover-poster { background-image: url("/posters/dusk-desktop.jpg"), none; }
+html[data-time="night"] .cover-poster { background-image: url("/posters/night-desktop.jpg"), none; }
+@media (max-width: 720px) {
+  html[data-time="dawn"] .cover-poster { background-image: url("/posters/dawn-mobile.jpg"), none; }
+  html[data-time="noon"] .cover-poster { background-image: url("/posters/noon-mobile.jpg"), none; }
+  html[data-time="dusk"] .cover-poster { background-image: url("/posters/dusk-mobile.jpg"), none; }
+  html[data-time="night"] .cover-poster { background-image: url("/posters/night-mobile.jpg"), none; }
+}
+.cover-poster { background-color: var(--sea-low); transition: background-image 0.8s; }
+/* colour grade on top of the render: pushes the dusk sky from olive towards violet */
+.cover-grade { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color; opacity: 0; transition: opacity 1.2s; }
+html[data-time="dusk"] .cover-grade { opacity: 0.55; background: linear-gradient(to bottom, #3b2a6b 0%, #6b3a6e 26%, transparent 50%); }
+html[data-time="dawn"] .cover-grade { opacity: 0.25; background: linear-gradient(to bottom, #6f86b8 0%, transparent 40%); }
 .ocean-canvas { position: absolute; inset: 0; opacity: 0; transition: opacity 1.8s var(--ease); }
 html[data-ocean="live"] .ocean-canvas { opacity: 1; }
 .ocean-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
@@ -39,9 +56,18 @@ html[data-time="dawn"] .cover-shade {
 }
 html[data-time="noon"] .cover-shade {
   background:
-    linear-gradient(to bottom, rgb(10 40 70 / 0.28), transparent 30%),
-    radial-gradient(40% 50% at 88% 62%, rgb(5 30 55 / 0.3), transparent 70%),
-    linear-gradient(to top, rgb(3 20 36 / 0.55), transparent 45%);
+    linear-gradient(to bottom, rgb(255 255 255 / 0.12), transparent 30%),
+    linear-gradient(to top, rgb(3 20 36 / 0.6), transparent 46%);
+}
+/* noon: the sky is pale, so everything printed on the sky turns to deep sea ink;
+   the story printed on the water stays white */
+html[data-time="noon"] :is(.cover-strip, .masthead, .cover-side) {
+  --cover-ink: #0f2840;
+  --cover-ink-2: rgb(15 40 64 / 0.72);
+  --cover-rule: rgb(15 40 64 / 0.28);
+  --cover-shadow: 0 1px 18px rgb(255 255 255 / 0.5);
+  color: var(--cover-ink);
+  text-shadow: var(--cover-shadow);
 }
 .cover-stars {
   position: absolute;
@@ -104,7 +130,7 @@ html[data-time="night"] .cover-stars { opacity: 0.75; }
 }
 .time-switch button[aria-pressed="true"] { background: var(--cover-ink); color: var(--sea-ink); }
 .time-switch button:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--cover-ink) 18%, transparent); }
-html[data-time="dawn"] .time-switch button[aria-pressed="true"] { color: #fbefe6; }
+html:is([data-time="dawn"], [data-time="noon"]) .time-switch button[aria-pressed="true"] { color: #fbefe6; }
 
 .masthead { grid-column: 1 / -1; text-align: center; margin-top: clamp(14px, 3vh, 36px); line-height: 1; }
 .mh-en {
@@ -245,6 +271,6 @@ html[data-time="dawn"] .time-switch button[aria-pressed="true"] { color: #fbefe6
   .cover-print { width: 100%; max-width: 160px; padding: 6px 6px 8px; }
   .cover-print figcaption { display: none; }
   .scroll-cue { display: none; }
-  .also-grid { gap: 40px; }
+  .also-grid { grid-template-columns: 1fr; gap: 40px; }
   .also-grid li, .also-grid li.is-lead { grid-column: 1 / -1; grid-row: auto; }
 }
