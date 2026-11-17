@@ -134,7 +134,8 @@ export default function Ocean() {
 
       const apply = () => {
         const phi = THREE.MathUtils.degToRad(90 - live.elevation);
-        const theta = THREE.MathUtils.degToRad(live.azimuth);
+        // Narrow portrait screens see less sky sideways: pull the sun/moon toward the centre.
+        const theta = THREE.MathUtils.degToRad(mobile ? 180 + (live.azimuth - 180) * 0.35 : live.azimuth);
         sun.setFromSphericalCoords(1, phi, theta);
         sky.sunPosition.value.copy(sun);
         water.sunDirection.value.copy(sun).normalize();
