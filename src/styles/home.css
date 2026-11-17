@@ -31,10 +31,17 @@ html[data-ocean="live"] .ocean-canvas { opacity: 1; }
     linear-gradient(to bottom, rgb(0 0 0 / 0.16), transparent 22%),
     linear-gradient(to top, rgb(5 8 14 / 0.55), transparent 42%);
 }
+/* dawn uses dark ink, so the wash is light: a morning haze over the water */
 html[data-time="dawn"] .cover-shade {
   background:
-    linear-gradient(to bottom, rgb(255 245 235 / 0.18), transparent 28%),
-    linear-gradient(to top, rgb(10 16 30 / 0.5), transparent 42%);
+    linear-gradient(to bottom, rgb(255 245 235 / 0.2), transparent 28%),
+    linear-gradient(to top, rgb(246 228 216 / 0.78), rgb(246 228 216 / 0.35) 34%, transparent 52%);
+}
+html[data-time="noon"] .cover-shade {
+  background:
+    linear-gradient(to bottom, rgb(10 40 70 / 0.28), transparent 30%),
+    radial-gradient(40% 50% at 88% 62%, rgb(5 30 55 / 0.3), transparent 70%),
+    linear-gradient(to top, rgb(3 20 36 / 0.55), transparent 45%);
 }
 .cover-stars {
   position: absolute;
@@ -96,6 +103,7 @@ html[data-time="night"] .cover-stars { opacity: 0.75; }
   transition: background 0.3s, color 0.3s;
 }
 .time-switch button[aria-pressed="true"] { background: var(--cover-ink); color: var(--sea-ink); }
+.time-switch button:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--cover-ink) 18%, transparent); }
 html[data-time="dawn"] .time-switch button[aria-pressed="true"] { color: #fbefe6; }
 
 .masthead { grid-column: 1 / -1; text-align: center; margin-top: clamp(14px, 3vh, 36px); line-height: 1; }

@@ -41,10 +41,11 @@ html[data-surface="tide"] body {
   gap: 10px;
   font-size: 11px;
   letter-spacing: 0.16em;
-  writing-mode: vertical-rl;
   color: #4b3f2c;
+  text-align: center;
+  line-height: 1.4;
 }
-.tg-bar { width: 3px; height: 34vh; background: rgb(75 63 44 / 0.2); position: relative; overflow: hidden; }
+.tg-bar { width: 3px; height: 30vh; background: rgb(75 63 44 / 0.2); position: relative; overflow: hidden; }
 .tg-bar i { position: absolute; inset: 0; background: #1f5566; transform-origin: top; transform: scaleY(0.15); }
 
 .tide-list { max-width: 1120px; margin: 0 auto; padding: 24px var(--gutter) 0; display: flex; flex-direction: column; gap: clamp(40px, 7vw, 96px); }

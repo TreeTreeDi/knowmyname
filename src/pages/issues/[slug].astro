@@ -45,6 +45,9 @@ const d = issue.data;
         <Content components={{ PullQuote }} />
         <p class="art-end" aria-label="本期完">本期完</p>
       </div>
+      <p class="art-folio" aria-hidden="true">
+        <span>海边周刊 · The Seaside Weekly</span><span>{volLabel(d.vol)} · {d.section}</span><span>{fmtDate(d.date)}</span>
+      </p>
     </article>
 
     <nav class="art-next" aria-label="翻页">

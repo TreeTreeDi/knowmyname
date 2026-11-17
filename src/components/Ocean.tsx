@@ -31,9 +31,9 @@ interface Preset {
 // Azimuth 180 puts the sun straight ahead (camera looks down -Z).
 export const PRESETS: Record<Phase, Preset> = {
   dawn: { elevation: 3.2, azimuth: 197, exposure: 0.26, turbidity: 5, rayleigh: 2.4, mieCoefficient: 0.006, mieDirectionalG: 0.82, waterColor: 0x0c2433, sunColor: 0xffe2cc, clouds: 0.42, cloudDensity: 0.45, distortion: 2.4, bloom: 0.14 },
-  noon: { elevation: 34, azimuth: 186, exposure: 0.36, turbidity: 2.2, rayleigh: 0.85, mieCoefficient: 0.004, mieDirectionalG: 0.78, waterColor: 0x003049, sunColor: 0xffffff, clouds: 0.34, cloudDensity: 0.4, distortion: 3.4, bloom: 0.05 },
+  noon: { elevation: 42, azimuth: 186, exposure: 0.26, turbidity: 1.4, rayleigh: 1.6, mieCoefficient: 0.003, mieDirectionalG: 0.75, waterColor: 0x00283f, sunColor: 0xffffff, clouds: 0.28, cloudDensity: 0.32, distortion: 3.4, bloom: 0.03 },
   dusk: { elevation: 0.9, azimuth: 164, exposure: 0.13, turbidity: 10, rayleigh: 3.4, mieCoefficient: 0.006, mieDirectionalG: 0.86, waterColor: 0x150d1c, sunColor: 0xffae70, clouds: 0.5, cloudDensity: 0.55, distortion: 3.7, bloom: 0.1 },
-  night: { elevation: 16, azimuth: 160, exposure: 0.02, turbidity: 1.2, rayleigh: 0.5, mieCoefficient: 0.002, mieDirectionalG: 0.9, waterColor: 0x01060d, sunColor: 0x9fbfff, clouds: 0.25, cloudDensity: 0.35, distortion: 2.2, bloom: 0.45 },
+  night: { elevation: 11, azimuth: 205, exposure: 0.018, turbidity: 1.2, rayleigh: 0.5, mieCoefficient: 0.002, mieDirectionalG: 0.9, waterColor: 0x01060d, sunColor: 0x9fbfff, clouds: 0.25, cloudDensity: 0.35, distortion: 2.2, bloom: 0.2 },
 };
 
 const currentPhase = (): Phase => (document.documentElement.dataset.time as Phase) || 'dusk';

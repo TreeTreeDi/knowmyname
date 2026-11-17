@@ -69,6 +69,22 @@ for (const vp of ['desktop', 'mobile']) {
       },
     });
 }
+if (want('vt')) {
+  // Cross-document view transition: click the cover headline, grab a frame mid-flight, then the landed page.
+  const ctx = await browser.newContext(viewports.desktop);
+  const page = await ctx.newPage();
+  await page.goto(base + '/?time=dusk&static', { waitUntil: 'networkidle' });
+  await page.addStyleTag({ content: '::view-transition-group(*){animation-duration:2.4s!important}' }).catch(() => {});
+  const supported = await page.evaluate(() => 'startViewTransition' in document && CSS.supports('view-transition-name: a'));
+  await page.click('.cs-title');
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: `${out}/desktop-vt-midflight.png` });
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(2600);
+  await page.screenshot({ path: `${out}/desktop-vt-landed.png` });
+  console.log('view transitions supported:', supported, '→', page.url());
+  await ctx.close();
+}
 if (want('fallback')) {
   await shoot('desktop', 'home-static', '/?time=dusk&static', { ocean: true });
   for (const t of ['dawn', 'noon', 'dusk', 'night']) await shoot('desktop', `home-webgl2-${t}`, `/?time=${t}&gl`, { ocean: true });
