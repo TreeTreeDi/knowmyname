@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import PullQuote from '../../components/PullQuote.astro';
+import { getIssues, volLabel, volNum, fmtDate, readingMinutes, vtCover, vtTitle, type Issue } from '../../lib/issues';
+
+export async function getStaticPaths() {
+  const issues = await getIssues();
+  return issues.map((issue, i) => ({
+    params: { slug: issue.id },
+    props: { issue, newer: issues[i - 1] ?? null, older: issues[i + 1] ?? null },
+  }));
+}
+
+interface Props { issue: Issue; newer: Issue | null; older: Issue | null }
+const { issue, newer, older } = Astro.props;
+const { Content } = await render(issue);
+const d = issue.data;
+---
+
+<Base title={d.title} description={d.subtitle} surface="paper">
+  <SiteHeader current="article" />
+  <main id="main">
+    <article class="article">
+      <header class="art-head">
+        <div class="art-rail">
+          <span class="art-vol">{volLabel(d.vol)}</span>
+          <span class="art-sec">{d.section}<em>{d.sectionEn}</em></span>
+          {d.sample && <span class="art-sample">示例内容</span>}
+        </div>
+        <h1 class="art-title" style={`view-transition-name:${vtTitle(issue)}`}>{d.title}</h1>
+        <p class="art-dek">{d.subtitle}</p>
+        <p class="art-byline">文 / Shane<span>·</span>{fmtDate(d.date)}<span>·</span>约 {readingMinutes(issue.body)} 分钟</p>
+      </header>
+
+      <figure class="art-cover">
+        <Image src={d.cover} alt={d.coverAlt} widths={[720, 1200, 1800]} sizes="(max-width: 720px) 100vw, 1200px" loading="eager" fetchpriority="high" style={`view-transition-name:${vtCover(issue)}`} />
+        {d.coverCaption && <figcaption><b>{volNum(d.vol)}</b>{d.coverCaption}</figcaption>}
+      </figure>
+
+      <div class="prose">
+        <Content components={{ PullQuote }} />
+        <p class="art-end" aria-label="本期完">本期完</p>
+      </div>
+    </article>
+
+    <nav class="art-next" aria-label="翻页">
+      {older ? (
+        <a class="an-older" href={`/issues/${older.id}/`}>
+          <span class="an-dir">← 上一期 {volLabel(older.data.vol)}</span>
+          <span class="an-title">{older.data.title}</span>
+        </a>
+      ) : <span />}
+      {newer ? (
+        <a class="an-newer" href={`/issues/${newer.id}/`}>
+          <span class="an-dir">下一期 {volLabel(newer.data.vol)} →</span>
+          <span class="an-title">{newer.data.title}</span>
+        </a>
+      ) : (
+        <a class="an-newer" href="/">
+          <span class="an-dir">这是最新一期 →</span>
+          <span class="an-title">回到海边</span>
+        </a>
+      )}
+    </nav>
+  </main>
+  <SiteFooter />
+</Base>

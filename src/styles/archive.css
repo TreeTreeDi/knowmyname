@@ -1,0 +1,96 @@
+/* ==========================================================================
+   ARCHIVE · tide. Scroll down = leaf back through older issues.
+   Older issues sit further up the beach and are more sun-bleached (--age 0→1).
+   ========================================================================== */
+html[data-surface="tide"] body {
+  background-color: #e6dac4;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.15 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(to bottom, #e9dfcb, #dccbab);
+}
+.tide { position: relative; padding-bottom: clamp(64px, 8vw, 120px); overflow-x: clip; }
+.tide-head {
+  position: relative;
+  color: #f3eee4;
+  padding: clamp(56px, 9vw, 120px) var(--gutter) clamp(96px, 12vw, 180px);
+  background: linear-gradient(to bottom, #133246, #2a6a7c 70%, #5d9aa0);
+  text-align: center;
+}
+.tide-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 80px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C 180 10 300 70 480 44 S 780 6 960 38 S 1260 74 1440 34 V80 H0Z' fill='%23f6f1e4' opacity='.55'/%3E%3Cpath d='M0 54 C 200 30 340 80 540 58 S 860 26 1040 52 S 1300 80 1440 50 V80 H0Z' fill='%23e9dfcb'/%3E%3C/svg%3E") bottom / 100% 100% no-repeat;
+}
+.tide-kicker { opacity: 0.7; }
+.tide-head h1 { font-size: clamp(64px, 11vw, 168px); line-height: 1; margin: 12px 0 20px; letter-spacing: 0.06em; }
+.tide-lede { font-size: 18px; line-height: 1.8; max-width: 28em; margin: 0 auto; opacity: 0.88; }
+
+.tide-gauge {
+  position: fixed;
+  right: clamp(16px, 2.4vw, 36px);
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  writing-mode: vertical-rl;
+  color: #4b3f2c;
+}
+.tg-bar { width: 3px; height: 34vh; background: rgb(75 63 44 / 0.2); position: relative; overflow: hidden; }
+.tg-bar i { position: absolute; inset: 0; background: #1f5566; transform-origin: top; transform: scaleY(0.15); }
+
+.tide-list { max-width: 1120px; margin: 0 auto; padding: 24px var(--gutter) 0; display: flex; flex-direction: column; gap: clamp(40px, 7vw, 96px); }
+.tide-item { width: min(100%, 720px); }
+.tide-item:nth-child(even) { align-self: flex-end; }
+.tide-card {
+  display: grid;
+  grid-template-columns: 42% 1fr;
+  background: #f7f2e7;
+  color: var(--ink);
+  box-shadow: 0 30px 50px -28px rgb(60 40 10 / 0.55), 0 2px 4px rgb(60 40 10 / 0.12);
+  transform: rotate(var(--tilt));
+  filter: sepia(calc(var(--age) * 0.55)) saturate(calc(1 - var(--age) * 0.45)) brightness(calc(1 + var(--age) * 0.03));
+  transition: transform 0.5s var(--ease), box-shadow 0.5s;
+}
+.tide-card:hover { transform: rotate(0deg) translateY(-6px); box-shadow: 0 40px 60px -28px rgb(60 40 10 / 0.6); }
+.tide-img img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 5; }
+.tide-text { display: flex; flex-direction: column; padding: clamp(20px, 3vw, 36px); gap: 10px; }
+.tide-vol { font-family: var(--f-serif); font-size: clamp(36px, 4vw, 54px); line-height: 1; color: var(--accent); }
+.tide-title { font-family: var(--f-cn); font-weight: 700; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.25; }
+.tide-dek { color: var(--ink-2); font-size: 15px; line-height: 1.75; }
+.tide-meta { margin-top: auto; font-size: 12px; letter-spacing: 0.1em; color: var(--ink-3); border-top: 1px solid var(--rule); padding-top: 10px; }
+.tide-end { text-align: center; margin-top: clamp(56px, 8vw, 120px); color: #6b5d45; font-size: 15px; letter-spacing: 0.1em; }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .tide-item { animation: wash-in linear both; animation-timeline: view(); animation-range: entry 0% cover 42%; }
+    .tide-item:nth-child(even) { animation-name: wash-in-left; }
+    .tg-bar i { animation: tide-fill linear both; animation-timeline: scroll(root); }
+  }
+}
+@keyframes wash-in {
+  from { opacity: 0; transform: translate(14vw, 60px) rotate(9deg); }
+  60% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+@keyframes wash-in-left {
+  from { opacity: 0; transform: translate(-14vw, 60px) rotate(-9deg); }
+  60% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+@keyframes tide-fill { from { transform: scaleY(0.04); } to { transform: scaleY(1); } }
+
+@media (max-width: 720px) {
+  .tide-gauge { display: none; }
+  .tide-card { grid-template-columns: 1fr; }
+  .tide-img img { aspect-ratio: 16 / 10; }
+  .tide-item { width: 100%; }
+}

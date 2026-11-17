@@ -1,0 +1,58 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { getIssues, volLabel, volNum, fmtDate, vtCover, vtTitle, readingMinutes } from '../../lib/issues';
+
+const issues = await getIssues();
+const [latest, ...rest] = issues;
+const sections = [...new Set(issues.map((i) => i.data.section))];
+---
+
+<Base title="目录" surface="paper">
+  <SiteHeader current="issues" />
+  <main id="main" class="toc">
+    <header class="toc-head">
+      <p class="toc-kicker">Contents · {volLabel(issues.at(-1)!.data.vol)}—{volNum(latest.data.vol)}</p>
+      <h1 class="toc-title">目录</h1>
+      <p class="toc-lede">一本只印给自己的周刊。不写日期，只写刊号；每一期都压在上一期上面，像潮水一层一层推上岸。</p>
+      <ul class="toc-sections" aria-label="栏目">
+        {sections.map((s) => <li>{s}</li>)}
+      </ul>
+    </header>
+
+    <a class="toc-lead" href={`/issues/${latest.id}/`}>
+      <div class="toc-lead-img">
+        <Image src={latest.data.cover} alt={latest.data.coverAlt} widths={[640, 960, 1280]} sizes="(max-width: 720px) 100vw, 58vw" style={`view-transition-name:${vtCover(latest)}`} />
+      </div>
+      <div class="toc-lead-text">
+        <p class="toc-no">{volNum(latest.data.vol)}</p>
+        <p class="toc-sec">{latest.data.section} <em>{latest.data.sectionEn}</em></p>
+        <h2 style={`view-transition-name:${vtTitle(latest)}`}>{latest.data.title}</h2>
+        <p class="toc-dek">{latest.data.subtitle}</p>
+        <p class="toc-meta">{fmtDate(latest.data.date)} · 约 {readingMinutes(latest.body)} 分钟</p>
+      </div>
+    </a>
+
+    <ol class="toc-list">
+      {rest.map((i) => (
+        <li>
+          <a href={`/issues/${i.id}/`}>
+            <span class="toc-no">{volNum(i.data.vol)}</span>
+            <span class="toc-body">
+              <span class="toc-sec">{i.data.section} <em>{i.data.sectionEn}</em></span>
+              <span class="toc-h" style={`view-transition-name:${vtTitle(i)}`}>{i.data.title}</span>
+              <span class="toc-dek">{i.data.subtitle}</span>
+            </span>
+            <span class="toc-thumb">
+              <Image src={i.data.cover} alt="" widths={[240, 480]} sizes="160px" style={`view-transition-name:${vtCover(i)}`} />
+            </span>
+            <span class="toc-meta">{fmtDate(i.data.date)}<br />约 {readingMinutes(i.body)} 分钟</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </main>
+  <SiteFooter />
+</Base>

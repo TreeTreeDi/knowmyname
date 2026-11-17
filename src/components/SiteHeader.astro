@@ -1,0 +1,23 @@
+---
+interface Props { current?: 'home' | 'issues' | 'archive' | 'bottle' | 'article'; tone?: 'cover' | 'paper' }
+const { current, tone = 'paper' } = Astro.props;
+const links = [
+  { href: '/issues/', key: 'issues', zh: '目录', en: 'Contents' },
+  { href: '/archive/', key: 'archive', zh: '潮汐归档', en: 'Archive' },
+  { href: '/bottle/', key: 'bottle', zh: '漂流瓶', en: 'Bottles' },
+] as const;
+---
+
+<header class={`site-header tone-${tone}`}>
+  <a class="site-logo" href="/" aria-label="海边周刊 首页">
+    <span class="site-logo-zh">海边周刊</span>
+    <span class="site-logo-en">The Seaside Weekly</span>
+  </a>
+  <nav aria-label="主导航">
+    {links.map((l) => (
+      <a href={l.href} aria-current={current === l.key ? 'page' : undefined}>
+        <span>{l.zh}</span><em>{l.en}</em>
+      </a>
+    ))}
+  </nav>
+</header>
