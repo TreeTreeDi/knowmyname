@@ -4,3 +4,4 @@ dist/
 data/bottles.runtime.json
 *.log
 .DS_Store
+screenshots/
