@@ -1,0 +1,16 @@
+README.md
+  h_f915f2c49f6df5 5,91
+vercel.json
+  h_f915f2c49f6df5 10,15,20,25,30,35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7fa3ae5fc74981b1c21e82c16ddf49e183b8b053",
+  "prompts": {},
+  "humans": {
+    "h_f915f2c49f6df5": {
+      "author": "Grok Bot <grokbot@local>"
+    }
+  }
+}
