@@ -1,0 +1,11 @@
+---
+import { shortDate, isoDate, minutesOf, vtTitle, type Post } from '../lib/posts';
+interface Props { post: Post }
+const { post } = Astro.props;
+---
+<li class="post-item">
+  <a href={`/posts/${post.id}/`}>
+    <span class="pi-title" style={`view-transition-name:${vtTitle(post)}`}>{post.data.title}</span>
+    <span class="pi-meta"><time datetime={isoDate(post.data.date)}>{shortDate(post.data.date)}</time> · {minutesOf(post)}min</span>
+  </a>
+</li>

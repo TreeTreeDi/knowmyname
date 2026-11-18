@@ -7,7 +7,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 const round = process.argv[2] ?? '1';
 const base = process.argv[3] ?? 'http://localhost:4331';
-const out = `screenshots/round-${round}`;
+const out = process.env.OUT ?? `screenshots/round-${round}`;
 await mkdir(out, { recursive: true });
 
 const browser = await chromium.launch({
@@ -52,53 +52,19 @@ const want = (n) => !only || only.some((o) => n.includes(o));
 
 for (const vp of ['desktop', 'mobile']) {
   for (const t of ['dawn', 'noon', 'dusk', 'night']) if (want(`home-${t}`)) await shoot(vp, `home-${t}`, `/?time=${t}`, { ocean: true });
-  if (want('home-full')) await shoot(vp, 'home-full', '/?time=dusk&static', { full: true, ocean: true });
-  if (want('toc')) await shoot(vp, 'toc', '/issues/?time=dusk', { full: true });
-  if (want('article')) await shoot(vp, 'article', '/issues/vol-06/?time=dusk', { full: true });
-  if (want('article-top')) await shoot(vp, 'article-top', '/issues/vol-04/?time=noon');
-  if (want('archive')) {
-    await shoot(vp, 'archive-top', '/archive/?time=dusk');
-    await shoot(vp, 'archive-mid', '/archive/?time=dusk', { scroll: 0.45 });
-    await shoot(vp, 'archive-end', '/archive/?time=dusk', { scroll: 0.82 });
-  }
-  if (want('bottle'))
-    await shoot(vp, 'bottle', '/bottle/?time=dusk', {
+  if (want('home-full')) await shoot(vp, 'home-full', '/?time=dusk', { full: true, ocean: true });
+  if (want('posts')) await shoot(vp, 'posts', '/posts/?time=dusk', { full: true });
+  if (want('post')) await shoot(vp, 'post', '/posts/claude-code-memory/?time=dusk', { full: true });
+  if (want('post-night')) await shoot(vp, 'post-night', '/posts/streaming-markdown/?time=night');
+  if (want('projects')) await shoot(vp, 'projects', '/projects/?time=dusk', { full: true });
+  if (want('life')) await shoot(vp, 'life', '/life/?time=dusk', { full: true });
+  if (want('lightbox'))
+    await shoot(vp, 'life-lightbox', '/life/?time=dusk', {
       before: async (page) => {
-        await page.getByRole('button', { name: '捞一只' }).click();
-        await page.waitForTimeout(1800);
+        await page.locator('.moment > button').nth(2).click();
+        await page.waitForTimeout(900);
       },
     });
-}
-if (want('switch')) {
-  // Time switcher: start at dusk, click 夜晚, let the sea tween over.
-  await shoot('desktop', 'switch-dusk-to-night', '/?time=dusk', {
-    ocean: true,
-    before: async (page) => {
-      await page.click('.time-switch button[data-phase="night"]');
-      await page.waitForTimeout(4000);
-    },
-  });
-}
-if (want('vt')) {
-  // Cross-document view transition: click the cover headline, grab a frame mid-flight, then the landed page.
-  const ctx = await browser.newContext(viewports.desktop);
-  const page = await ctx.newPage();
-  await page.goto(base + '/?time=dusk&static', { waitUntil: 'networkidle' });
-  await page.addStyleTag({ content: '::view-transition-group(*){animation-duration:2.4s!important}' }).catch(() => {});
-  const supported = await page.evaluate(() => 'startViewTransition' in document && CSS.supports('view-transition-name: a'));
-  await page.click('.cs-title');
-  await page.waitForTimeout(500);
-  await page.screenshot({ path: `${out}/desktop-vt-midflight.png` });
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2600);
-  await page.screenshot({ path: `${out}/desktop-vt-landed.png` });
-  console.log('view transitions supported:', supported, '→', page.url());
-  await ctx.close();
-}
-if (want('fallback')) {
-  await shoot('desktop', 'home-static', '/?time=dusk&static', { ocean: true });
-  for (const t of ['dawn', 'noon', 'dusk', 'night']) await shoot('desktop', `home-webgl2-${t}`, `/?time=${t}&gl`, { ocean: true });
-  await shoot('mobile', 'home-static', '/?time=night&static', { ocean: true });
 }
 
 await writeFile(`${out}/log.json`, JSON.stringify(log, null, 2));

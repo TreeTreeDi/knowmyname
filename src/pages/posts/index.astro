@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import PostItem from '../../components/PostItem.astro';
+import { getPosts, byYear } from '../../lib/posts';
+const groups = byYear(await getPosts());
+---
+<Base title="文章">
+  <SiteHeader current="posts" />
+  <main id="main" class="page">
+    <h1 class="page-title">文章</h1>
+    {groups.map(([y, list]) => (
+      <section class="year-group" aria-label={String(y)}>
+        <span class="ghost" aria-hidden="true">{y}</span>
+        <ul class="post-list">{list.map((p) => <PostItem post={p} />)}</ul>
+      </section>
+    ))}
+  </main>
+  <SiteFooter back="/" />
+</Base>

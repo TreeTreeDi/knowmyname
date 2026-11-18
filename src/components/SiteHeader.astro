@@ -1,23 +1,42 @@
 ---
-interface Props { current?: 'home' | 'issues' | 'archive' | 'bottle' | 'article'; tone?: 'cover' | 'paper' }
-const { current, tone = 'paper' } = Astro.props;
+import Icon from './Icon.astro';
+import { PHASES, PHASE_LABEL } from '../lib/time';
+interface Props { current?: 'posts' | 'projects' | 'life' }
+const { current } = Astro.props;
 const links = [
-  { href: '/issues/', key: 'issues', zh: '目录', en: 'Contents' },
-  { href: '/archive/', key: 'archive', zh: '潮汐归档', en: 'Archive' },
-  { href: '/bottle/', key: 'bottle', zh: '漂流瓶', en: 'Bottles' },
+  { href: '/posts/', key: 'posts', label: '文章', icon: 'posts' },
+  { href: '/projects/', key: 'projects', label: '作品', icon: 'projects' },
+  { href: '/life/', key: 'life', label: '生活', icon: 'life' },
 ] as const;
 ---
-
-<header class={`site-header tone-${tone}`}>
-  <a class="site-logo" href="/" aria-label="海边周刊 首页">
-    <span class="site-logo-zh">海边周刊</span>
-    <span class="site-logo-en">The Seaside Weekly</span>
+<header class="site-header">
+  <a class="logo" href="/" aria-label="首页">
+    <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+      <circle class="logo-sun" cx="16" cy="15" r="6" />
+      <path class="logo-sea" d="M3 21c2.2 0 2.2-1.6 4.4-1.6S9.6 21 11.8 21s2.2-1.6 4.4-1.6 2.2 1.6 4.4 1.6 2.2-1.6 4.4-1.6S27.2 21 29 21M6 26c1.8 0 1.8-1.2 3.6-1.2s1.8 1.2 3.6 1.2 1.8-1.2 3.6-1.2 1.8 1.2 3.6 1.2 1.8-1.2 3.6-1.2S25.8 26 26 26" />
+    </svg>
   </a>
   <nav aria-label="主导航">
     {links.map((l) => (
-      <a href={l.href} aria-current={current === l.key ? 'page' : undefined}>
-        <span>{l.zh}</span><em>{l.en}</em>
+      <a href={l.href} aria-current={current === l.key ? 'page' : undefined} title={l.label}>
+        <span class="nav-text">{l.label}</span>
+        <Icon name={l.icon} class="nav-icon" />
+        <span class="sr-only nav-sr">{l.label}</span>
       </a>
     ))}
+    <a class="nav-ico" href="https://github.com/treetreedi" aria-label="GitHub" title="GitHub" rel="me"><Icon name="github" /></a>
+    <a class="nav-ico" href="/feed.xml" aria-label="RSS" title="RSS"><Icon name="rss" /></a>
+    <button class="nav-ico time-toggle" type="button" aria-label="切换光线" title="切换光线">
+      {PHASES.map((p) => <span data-phase={p} title={PHASE_LABEL[p].zh}><Icon name={p} /></span>)}
+    </button>
   </nav>
 </header>
+<script>
+  const order = ['dawn', 'noon', 'dusk', 'night'];
+  document.querySelector('.time-toggle')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = order[(order.indexOf(root.dataset.time ?? 'dusk') + 1) % order.length];
+    root.dataset.time = next;
+    sessionStorage.setItem('seaside-time', next);
+  });
+</script>

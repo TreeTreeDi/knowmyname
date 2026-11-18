@@ -1,161 +1,43 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import Ocean from '../components/Ocean.tsx';
-import Bottle from '../components/Bottle.tsx';
-import { getIssues, volLabel, volNum, vtCover, vtTitle } from '../lib/issues';
-import { PHASES, PHASE_LABEL } from '../lib/time';
+import Icon from '../components/Icon.astro';
+import PostItem from '../components/PostItem.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Moment from '../components/Moment.astro';
+import { getPosts } from '../lib/posts';
+import { projectGroups } from '../data/projects';
+import { moments } from '../data/life';
 
-const issues = await getIssues();
-const [latest, ...rest] = issues;
-const d = latest.data.date;
-const week = Math.ceil(((+d - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5 + new Date(Date.UTC(d.getUTCFullYear(), 0, 1)).getUTCDay() + 1) / 7);
-const issueDate = `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getUTCDate()} 日`;
+const posts = (await getPosts()).slice(0, 5);
+const projects = projectGroups.flatMap((g) => g.items).slice(0, 3);
 ---
 
-<Base surface="cover">
-  <div class="cover" id="main">
-    <div class="cover-poster" aria-hidden="true"></div>
+<Base>
+  <div class="sea" aria-hidden="true">
+    <div class="sea-poster"></div>
     <Ocean client:only="react" />
-    <div class="cover-grade" aria-hidden="true"></div>
-    <div class="cover-shade" aria-hidden="true"></div>
-    <div class="cover-stars" aria-hidden="true"></div>
-
-    <div class="cover-grid">
-      <div class="cover-strip">
-        <span class="strip-vol">{volLabel(latest.data.vol)}</span>
-        <span class="strip-date">{issueDate} · 第 {week} 周</span>
-        <nav class="cover-nav" aria-label="主导航">
-          <a href="/issues/">目录<em>Contents</em></a>
-          <a href="/archive/">潮汐归档<em>Archive</em></a>
-          <a href="/bottle/">漂流瓶<em>Bottles</em></a>
-        </nav>
-        <div class="time-switch" role="group" aria-label="切换海面光线">
-          {PHASES.map((p) => (
-            <button type="button" data-phase={p} aria-pressed="false" title={`${PHASE_LABEL[p].zh} · ${PHASE_LABEL[p].en}`}>
-              {PHASE_LABEL[p].zh}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <h1 class="masthead">
-        <span class="mh-en">The Seaside Weekly</span>
-        <span class="mh-zh">海边周刊</span>
-      </h1>
-
-
-
-
-      <a class="cover-story" href={`/issues/${latest.id}/`}>
-        <span class="cs-kicker"><b>{volLabel(latest.data.vol)}</b> 本期特稿 · {latest.data.sectionEn}</span>
-        <h2 class="cs-title" style={`view-transition-name:${vtTitle(latest)}`}>{latest.data.title}</h2>
-        <p class="cs-dek">{latest.data.subtitle}</p>
-        <span class="cs-cta">翻开本期 <span aria-hidden="true">→</span></span>
-      </a>
-
-      <aside class="cover-side">
-        <p class="side-sun" data-sun>上海 · 北京时间</p>
-        <ol class="cover-lines" aria-label="往期">
-          {rest.slice(0, 3).map((i) => (
-            <li>
-              <a href={`/issues/${i.id}/`}>
-                <span class="cl-no">{volNum(i.data.vol)}</span>
-                <span class="cl-title">{i.data.title}</span>
-                <span class="cl-sec">{i.data.section}</span>
-              </a>
-            </li>
-          ))}
-        </ol>
-        <figure class="cover-print">
-          <a href={`/issues/${latest.id}/`} tabindex="-1" aria-hidden="true">
-            <Image
-              src={latest.data.cover}
-              alt={latest.data.coverAlt}
-              widths={[360, 560, 720]}
-              sizes="(max-width: 720px) 46vw, 300px"
-              loading="eager"
-              fetchpriority="high"
-              style={`view-transition-name:${vtCover(latest)}`}
-            />
-          </a>
-          <figcaption>封面 · {latest.data.coverCaption}</figcaption>
-        </figure>
-      </aside>
-    </div>
-
-    <a class="scroll-cue" href="#inside"><span>翻开</span><i aria-hidden="true"></i></a>
   </div>
+  <SiteHeader />
+  <main id="main" class="page home">
+    <h1 class="home-name">Shane</h1>
 
-  <main id="inside" class="inside">
-    <section class="also">
-      <header class="sec-head">
-        <p class="sec-kicker">Also in the stack</p>
-        <h2>往期</h2>
-        <a class="sec-more" href="/issues/">完整目录 →</a>
-      </header>
-      <ol class="also-grid">
-        {rest.map((i, n) => (
-          <li class={n === 0 ? 'is-lead' : ''}>
-            <a href={`/issues/${i.id}/`}>
-              <Image src={i.data.cover} alt={i.data.coverAlt} widths={[360, 720]} sizes="(max-width: 720px) 92vw, 30vw" style={`view-transition-name:${vtCover(i)}`} />
-              <p class="also-meta"><b>{volLabel(i.data.vol)}</b>{i.data.section}</p>
-              <h3 style={`view-transition-name:${vtTitle(i)}`}>{i.data.title}</h3>
-              <p class="also-dek">{i.data.subtitle}</p>
-            </a>
-          </li>
-        ))}
-      </ol>
+    <section class="home-block" aria-labelledby="h-posts">
+      <h2 id="h-posts" class="block-head"><a href="/posts/">文章 <Icon name="arrow" size={14} /></a></h2>
+      <ul class="post-list">{posts.map((p) => <PostItem post={p} />)}</ul>
     </section>
 
-    <section class="home-bottle" id="bottle">
-      <header class="sec-head">
-        <p class="sec-kicker">Message in a bottle</p>
-        <h2>漂流瓶</h2>
-        <a class="sec-more" href="/bottle/">去海边 →</a>
-      </header>
-      <Bottle client:visible compact />
+    <section class="home-block" aria-labelledby="h-projects">
+      <h2 id="h-projects" class="block-head"><a href="/projects/">作品 <Icon name="arrow" size={14} /></a></h2>
+      <div class="project-grid is-compact">{projects.map((p) => <ProjectCard project={p} />)}</div>
     </section>
 
-    <SiteFooter />
+    <section class="home-block" aria-labelledby="h-life">
+      <h2 id="h-life" class="block-head"><a href="/life/">生活 <Icon name="arrow" size={14} /></a></h2>
+      <ul class="moments is-strip">{moments.slice(0, 4).map((m, i) => <Moment m={m} i={i} sizes="(max-width: 720px) 25vw, 160px" />)}</ul>
+    </section>
   </main>
+  <SiteFooter />
 </Base>
-
-<script>
-  // Time switcher + today's sunrise/sunset in Shanghai (NOAA approximation, ±2 min).
-  const root = document.documentElement;
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.time-switch button');
-  const sync = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.phase === root.dataset.time)));
-  buttons.forEach((b) =>
-    b.addEventListener('click', () => {
-      const p = b.dataset.phase!;
-      root.dataset.time = p;
-      sessionStorage.setItem('seaside-time', p);
-      const u = new URL(location.href);
-      u.searchParams.set('time', p);
-      history.replaceState(null, '', u);
-      sync();
-    }),
-  );
-  sync();
-
-  const parts = Object.fromEntries(
-    new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: 'numeric', day: 'numeric' })
-      .formatToParts(new Date())
-      .map((p) => [p.type, Number(p.value)]),
-  );
-  const rad = Math.PI / 180;
-  const doy = (Date.UTC(parts.year, parts.month - 1, parts.day) - Date.UTC(parts.year, 0, 0)) / 864e5;
-  const g = ((2 * Math.PI) / 365) * (doy - 1);
-  const eq = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
-  const decl = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
-  const lat = 31.23, lon = 121.47;
-  const ha = Math.acos(Math.cos(90.833 * rad) / (Math.cos(lat * rad) * Math.cos(decl)) - Math.tan(lat * rad) * Math.tan(decl)) / rad;
-  const hm = (mins: number) => {
-    const m = Math.round(mins + 480) % 1440;
-    return `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`;
-  };
-  const el = document.querySelector('[data-sun]');
-  if (el) el.textContent = `今日上海 · 日出 ${hm(720 - 4 * (lon + ha) - eq)} · 日落 ${hm(720 - 4 * (lon - ha) - eq)}`;
-</script>

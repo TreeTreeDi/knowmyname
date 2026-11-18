@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Icon from '../components/Icon.astro';
+import { projectGroups } from '../data/projects';
+---
+<Base title="作品">
+  <SiteHeader current="projects" />
+  <main id="main" class="page page-wide">
+    <header class="center-head">
+      <h1 class="page-title">作品</h1>
+      <a class="pill" href="https://github.com/treetreedi"><Icon name="github" size={16} /> GitHub</a>
+    </header>
+    {projectGroups.map((g) => (
+      <section class="project-group" aria-label={g.label}>
+        <span class="ghost" aria-hidden="true">{g.ghost}</span>
+        <div class="project-grid">{g.items.map((p) => <ProjectCard project={p} />)}</div>
+      </section>
+    ))}
+  </main>
+  <SiteFooter back="/" />
+</Base>

@@ -1,19 +1,11 @@
 ---
-import { getIssues, volLabel } from '../lib/issues';
-const issues = await getIssues();
-const latest = issues[0];
+interface Props { back?: string }
+const { back } = Astro.props;
 ---
-
-<footer class="colophon">
-  <div class="colophon-mast">
-    <p class="colophon-zh">海边周刊</p>
-    <p class="colophon-en">The Seaside Weekly — printed for one, read by anyone.</p>
-  </div>
-  <dl class="colophon-meta">
-    <div><dt>编辑 / 排字 / 印刷</dt><dd>Shane</dd></div>
-    <div><dt>最新一期</dt><dd>{volLabel(latest.data.vol)}</dd></div>
-    <div><dt>字体</dt><dd>OPPO Sans 4.0 · Geist Serif · Geist</dd></div>
-    <div><dt>海面</dt><dd>Three.js WebGPU · 北京时间</dd></div>
-  </dl>
-  <p class="colophon-note">本站所有文章当前均为示例内容，用于展示版式。</p>
+<footer class="site-footer">
+  {back && <a class="cd" href={back}><span aria-hidden="true">&gt;</span> cd ..</a>}
+  <p>
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 2025–PRESENT © Shane
+    <span class="sample-mark" title="文章正文与照片为示例占位">示例</span>
+  </p>
 </footer>

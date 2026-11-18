@@ -1,0 +1,17 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { Project } from '../data/projects';
+interface Props { project: Project }
+const { project: p } = Astro.props;
+const Tag = p.href ? 'a' : 'div';
+---
+<Tag class="project" href={p.href}>
+  <span class="pj-tile">
+    {p.thumb ? <Image src={p.thumb} alt="" widths={[96, 192]} sizes="48px" /> : <Icon name={p.icon} size={26} />}
+  </span>
+  <span class="pj-text">
+    <span class="pj-name">{p.name}</span>
+    <span class="pj-desc">{p.desc}</span>
+  </span>
+</Tag>

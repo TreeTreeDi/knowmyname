@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Moment from '../components/Moment.astro';
+import { moments } from '../data/life';
+---
+<Base title="生活">
+  <SiteHeader current="life" />
+  <main id="main" class="page page-full">
+    <h1 class="sr-only">生活</h1>
+    <ul class="moments">{moments.map((m, i) => <Moment m={m} i={i} />)}</ul>
+  </main>
+  <SiteFooter back="/" />
+</Base>

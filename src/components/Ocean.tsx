@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 /**
- * The homepage sea. Started from three.js r187 `webgpu_ocean` (WaterMesh + SkyMesh + bloom),
+ * The sea band at the top of the home page. Started from three.js r187 `webgpu_ocean` (WaterMesh + SkyMesh + bloom),
  * stripped of the demo cube/controls/inspector and driven by <html data-time>.
  *
  * - WebGPU when available, WebGL2 backend otherwise (WebGPURenderer falls back on its own; ?gl=1 forces it).
@@ -64,8 +64,10 @@ export default function Ocean() {
       const forceWebGL = forceWebGLArg;
       const renderer = new THREE.WebGPURenderer({ antialias: false, forceWebGL });
       const mobile = innerWidth < 720;
+      const W = () => el.clientWidth || innerWidth;
+      const H = () => el.clientHeight || innerHeight;
       renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.25 : 1.5));
-      renderer.setSize(innerWidth, innerHeight);
+      renderer.setSize(W(), H());
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
       try {
@@ -92,10 +94,13 @@ export default function Ocean() {
       el.appendChild(renderer.domElement);
 
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(mobile ? 62 : 52, innerWidth / innerHeight, 1, 20000);
+      // A wide, short band: narrow vertical FOV, and pitch so the horizon sits ~62% down the band.
+      const fovFor = (aspect: number) => Math.min(55, Math.max(24, 70 / Math.sqrt(aspect)));
+      const pitchFor = (fov: number) => Math.atan(0.24 * Math.tan(THREE.MathUtils.degToRad(fov / 2)));
+      const camera = new THREE.PerspectiveCamera(fovFor(W() / H()), W() / H(), 1, 20000);
       camera.position.set(0, mobile ? 9 : 7, 80);
       camera.rotation.order = 'YXZ';
-      const basePitch = mobile ? 0.08 : 0.095;
+      let basePitch = pitchFor(camera.fov);
       camera.rotation.x = basePitch;
 
       const pipeline = new THREE.RenderPipeline(renderer);
@@ -230,17 +235,20 @@ export default function Ocean() {
       sync();
 
       const onResize = () => {
-        camera.aspect = innerWidth / innerHeight;
+        camera.aspect = W() / H();
+        camera.fov = fovFor(camera.aspect);
+        basePitch = pitchFor(camera.fov);
         camera.updateProjectionMatrix();
-        renderer.setSize(innerWidth, innerHeight);
+        renderer.setSize(W(), H());
       };
-      addEventListener('resize', onResize);
+      const ro = new ResizeObserver(onResize);
+      ro.observe(el);
 
       cleanup = () => {
         renderer.setAnimationLoop(null);
         io.disconnect();
         mo.disconnect();
-        removeEventListener('resize', onResize);
+        ro.disconnect();
         removeEventListener('pointermove', onMove);
         document.removeEventListener('visibilitychange', sync);
         try {
