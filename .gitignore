@@ -8,3 +8,5 @@ screenshots/
 public/fonts/oppo-sans-site.woff2
 src/styles/fonts-site.css
 .obsidian/
+.vercel
+.env*
