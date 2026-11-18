@@ -5,17 +5,17 @@ import type { Moment } from '../data/life';
 interface Props { m: Moment; i: number; sizes?: string }
 const { m, i, sizes = '(max-width: 720px) 50vw, 300px' } = Astro.props;
 const id = `m-${i}`;
-const [, mo, d] = m.date.split('-');
+const [, mo, d] = m.date?.split('-') ?? [];
 ---
 <li class="moment">
   <button type="button" popovertarget={id} aria-label={m.alt}>
     <Image src={m.img} alt={m.alt} widths={[320, 640]} sizes={sizes} />
-    <span class="mo-date">{Number(mo)}.{Number(d)}</span>
+    {m.date && <span class="mo-date">{Number(mo)}.{Number(d)}</span>}
   </button>
   <div class="lightbox" id={id} popover>
     <figure>
       <Image src={m.img} alt={m.alt} widths={[960, 1400]} sizes="(max-width: 720px) 100vw, 80vh" loading="lazy" />
-      <figcaption><time>{m.date}</time>{m.note && <span>{m.note}</span>}</figcaption>
+      {(m.date || m.note) && <figcaption>{m.date && <time>{m.date}</time>}{m.note && <span>{m.note}</span>}</figcaption>}
     </figure>
     <button type="button" class="lb-close" popovertarget={id} popovertargetaction="hide" aria-label="关闭"><Icon name="close" /></button>
   </div>

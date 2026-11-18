@@ -2,7 +2,7 @@
 // Counts visible text per page: CJK characters + Latin words (+ digits groups), and dumps the visible strings.
 import { chromium } from 'playwright';
 const base = process.argv[2] ?? 'http://localhost:4331';
-const pages = Object.fromEntries((process.env.PAGES ?? 'home=/?static,posts=/posts/,post=/posts/claude-code-memory/,projects=/projects/,life=/life/').split(',').map((kv) => kv.split('=')));
+const pages = Object.fromEntries((process.env.PAGES ?? 'home=/?static,posts=/posts/,post=/posts/claude-code-memory-system/,projects=/projects/,life=/life/').split(',').map((kv) => kv.split('=')));
 const browser = await chromium.launch({ headless: true });
 const result = {};
 for (const [name, path] of Object.entries(pages)) {

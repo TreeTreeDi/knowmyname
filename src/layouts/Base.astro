@@ -1,11 +1,12 @@
 ---
 import '../styles/fonts.css';
+import '../styles/fonts-site.css';
 import '../styles/global.css';
 import { TIME_BOOT_SCRIPT } from '../lib/time';
 
 interface Props { title?: string; description?: string }
-const { title, description = 'Shane 的博客：文章、作品和生活。' } = Astro.props;
-const fullTitle = title ? `${title} · 海边` : '海边 · Shane';
+const { title, description = 'Shane（TreeTreeDi）的博客：文章、作品和生活。' } = Astro.props;
+const fullTitle = title ? `${title} · Shane` : 'Shane · TreeTreeDi';
 ---
 
 <!doctype html>
@@ -16,7 +17,7 @@ const fullTitle = title ? `${title} · 海边` : '海边 · Shane';
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title="海边" href="/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Shane" href="/feed.xml" />
     <link rel="preload" href="/fonts/oppo-sans-site.woff2" as="font" type="font/woff2" crossorigin />
     <script is:inline set:html={TIME_BOOT_SCRIPT} />
     <slot name="head" />

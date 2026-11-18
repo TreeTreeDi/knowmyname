@@ -1,31 +1,25 @@
-import type { ImageMetadata } from 'astro';
-import seaThumb from '../assets/life/sea-06.jpg';
-
-export type Icon = 'database' | 'video' | 'grid' | 'doc' | 'wave';
+// Migrated from treetreedi.me pages/projects.md.
+export type Icon = 'database' | 'video' | 'grid' | 'doc';
 export interface Project {
   name: string;
   desc: string;
   icon: Icon;
-  href?: string;
-  thumb?: ImageMetadata;
+  href: string;
 }
 
 export const projectGroups: { label: string; ghost: string; items: Project[] }[] = [
   {
-    label: '在做',
+    label: 'Current Focus',
     ghost: 'Now',
-    items: [
-      { name: 'CloudQuery', desc: '数据库一体化操作平台', icon: 'database' },
-      { name: '海边', desc: '这个博客 · WebGPU 海面', icon: 'wave', href: '/', thumb: seaThumb },
-    ],
+    items: [{ name: 'CloudQuery', desc: '数据库一体化操作平台', icon: 'database', href: 'https://cloudquery.club/' }],
   },
   {
-    label: '做过',
+    label: 'Projects',
     ghost: 'Built',
     items: [
-      { name: 'StreamFusion', desc: 'WebRTC 全栈直播平台', icon: 'video' },
-      { name: 'Multi-Mode Selection', desc: 'AG Grid 多模式选择', icon: 'grid' },
-      { name: 'markdown-flow', desc: '流式渲染 Markdown 的 npm 包', icon: 'doc' },
+      { name: 'StreamFusion', desc: 'WebRTC 全栈直播平台', icon: 'video', href: 'https://github.com/TreeTreeDi/StreamFusion' },
+      { name: 'Multi-Mode Selection', desc: 'AG Grid Community 实现自定义的多模式选择', icon: 'grid', href: 'https://github.com/TreeTreeDi/AG-Grid-Multi-Mode-Selection' },
+      { name: 'markdown-flow', desc: '流式渲染的 Markdown npm 包', icon: 'doc', href: 'https://github.com/TreeTreeDi/markdown-flow' },
     ],
   },
 ];

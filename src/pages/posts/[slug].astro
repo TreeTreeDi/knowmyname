@@ -14,7 +14,7 @@ const { post } = Astro.props;
 const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth <= 3);
 ---
-<Base title={post.data.title}>
+<Base title={post.data.title} description={post.data.description}>
   <SiteHeader current="posts" />
   <main id="main" class="page article">
     <h1 class="art-title" style={`view-transition-name:${vtTitle(post)}`}>{post.data.title}</h1>
@@ -35,3 +35,28 @@ const toc = headings.filter((h) => h.depth <= 3);
   </main>
   <SiteFooter back="/posts/" />
 </Base>
+
+<script>
+  // Mermaid diagrams: only fetched on posts that have one; re-themed when the light changes.
+  const pres = [...document.querySelectorAll<HTMLElement>('pre[data-language="mermaid"]')];
+  if (pres.length) {
+    const sources = pres.map((b) => b.textContent ?? '');
+    // Swap each <pre> for a plain figure so the diagram is measured and drawn in the body font, not the code font.
+    const blocks = pres.map((pre) => {
+      const fig = document.createElement('figure');
+      fig.className = 'mermaid-figure';
+      pre.replaceWith(fig);
+      return fig;
+    });
+    const { default: mermaid } = await import('mermaid');
+    const draw = async () => {
+      mermaid.initialize({ startOnLoad: false, theme: document.documentElement.dataset.time === 'night' ? 'dark' : 'neutral', fontFamily: getComputedStyle(document.body).fontFamily });
+      for (const [i, b] of blocks.entries()) {
+        const { svg } = await mermaid.render(`mmd-${i}-${Date.now()}`, sources[i]);
+        b.innerHTML = svg;
+      }
+    };
+    await draw();
+    new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-time'] });
+  }
+</script>

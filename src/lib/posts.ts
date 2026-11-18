@@ -2,8 +2,10 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'posts'>;
 
+/** Newest first. Drafts only show up in `astro dev`. */
 export async function getPosts(): Promise<Post[]> {
-  return (await getCollection('posts')).sort((a, b) => +b.data.date - +a.data.date);
+  const all = await getCollection('posts', (p) => import.meta.env.DEV || !p.data.draft);
+  return all.sort((a, b) => +b.data.date - +a.data.date);
 }
 
 const tz = 'Asia/Shanghai';

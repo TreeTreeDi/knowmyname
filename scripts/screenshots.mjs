@@ -54,8 +54,18 @@ for (const vp of ['desktop', 'mobile']) {
   for (const t of ['dawn', 'noon', 'dusk', 'night']) if (want(`home-${t}`)) await shoot(vp, `home-${t}`, `/?time=${t}`, { ocean: true });
   if (want('home-full')) await shoot(vp, 'home-full', '/?time=dusk', { full: true, ocean: true });
   if (want('posts')) await shoot(vp, 'posts', '/posts/?time=dusk', { full: true });
-  if (want('post')) await shoot(vp, 'post', '/posts/claude-code-memory/?time=dusk', { full: true });
-  if (want('post-night')) await shoot(vp, 'post-night', '/posts/streaming-markdown/?time=night');
+  const scrollTo = (sel, wait = 1500) => async (page) => {
+    await page.waitForTimeout(wait);
+    await page.locator(sel).first().evaluate((el) => el.scrollIntoView({ block: 'start', behavior: 'instant' }));
+    await page.evaluate(() => window.scrollBy(0, -80));
+    await page.waitForTimeout(800);
+  };
+  if (want('post-full')) await shoot(vp, 'post-full', '/posts/claude-code-memory-system/?time=dusk', { full: true });
+  if (want('post-longtitle')) await shoot(vp, 'post-longtitle', '/posts/code-splitting-tft-tti/?time=dusk');
+  if (want('post-code')) await shoot(vp, 'post-code', '/posts/code-splitting-tft-tti/?time=dusk', { before: scrollTo('.prose pre') });
+  if (want('post-mermaid')) await shoot(vp, 'post-mermaid', '/posts/data-platform-memory-ownership/?time=dusk', { before: scrollTo('.mermaid-figure svg', 3000) });
+  if (want('post-image')) await shoot(vp, 'post-image', '/posts/dt-sql-parser-deep-dive/?time=dusk', { before: scrollTo('.prose img') });
+  if (want('post-night')) await shoot(vp, 'post-night', '/posts/streaming-markdown-memoization/?time=night', { before: scrollTo('.prose pre') });
   if (want('projects')) await shoot(vp, 'projects', '/projects/?time=dusk', { full: true });
   if (want('life')) await shoot(vp, 'life', '/life/?time=dusk', { full: true });
   if (want('lightbox'))
