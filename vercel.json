@@ -5,62 +5,32 @@
   "outputDirectory": "dist",
   "redirects": [
     {
-      "source": "/posts/Claude Code Hooks：长期检查 AI 代码生成的 TypeScript 错误",
+      "source": "/posts/Claude%20Code%20Hooks%EF%BC%9A%E9%95%BF%E6%9C%9F%E6%A3%80%E6%9F%A5%20AI%20%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E7%9A%84%20TypeScript%20%E9%94%99%E8%AF%AF{/}?",
       "destination": "/posts/claude-code-hooks-typescript/",
       "permanent": true
     },
     {
-      "source": "/posts/Claude Code Hooks：长期检查 AI 代码生成的 TypeScript 错误/",
-      "destination": "/posts/claude-code-hooks-typescript/",
-      "permanent": true
-    },
-    {
-      "source": "/posts/streaming-markdown 三层 Memoization，Markdown 优化渲染速度",
+      "source": "/posts/streaming-markdown%20%E4%B8%89%E5%B1%82%20Memoization%EF%BC%8CMarkdown%20%E4%BC%98%E5%8C%96%E6%B8%B2%E6%9F%93%E9%80%9F%E5%BA%A6{/}?",
       "destination": "/posts/streaming-markdown-memoization/",
       "permanent": true
     },
     {
-      "source": "/posts/streaming-markdown 三层 Memoization，Markdown 优化渲染速度/",
-      "destination": "/posts/streaming-markdown-memoization/",
-      "permanent": true
-    },
-    {
-      "source": "/posts/从 TFT & TTI 出发的前端分包理解：CJS&ESM、Vite 与 React Router 相关",
+      "source": "/posts/%E4%BB%8E%20TFT%20&%20TTI%20%E5%87%BA%E5%8F%91%E7%9A%84%E5%89%8D%E7%AB%AF%E5%88%86%E5%8C%85%E7%90%86%E8%A7%A3%EF%BC%9ACJS&ESM%E3%80%81Vite%20%E4%B8%8E%20React%20Router%20%E7%9B%B8%E5%85%B3{/}?",
       "destination": "/posts/code-splitting-tft-tti/",
       "permanent": true
     },
     {
-      "source": "/posts/从 TFT & TTI 出发的前端分包理解：CJS&ESM、Vite 与 React Router 相关/",
-      "destination": "/posts/code-splitting-tft-tti/",
-      "permanent": true
-    },
-    {
-      "source": "/posts/拾遗：React 设计 从批处理到 useTransition",
+      "source": "/posts/%E6%8B%BE%E9%81%97%EF%BC%9AReact%20%E8%AE%BE%E8%AE%A1%20%E4%BB%8E%E6%89%B9%E5%A4%84%E7%90%86%E5%88%B0%20useTransition{/}?",
       "destination": "/posts/react-batching-to-usetransition/",
       "permanent": true
     },
     {
-      "source": "/posts/拾遗：React 设计 从批处理到 useTransition/",
-      "destination": "/posts/react-batching-to-usetransition/",
-      "permanent": true
-    },
-    {
-      "source": "/posts/数据中台：数据库操作模块的内存治理与数据所有权重构",
+      "source": "/posts/%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%8F%B0%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E6%A8%A1%E5%9D%97%E7%9A%84%E5%86%85%E5%AD%98%E6%B2%BB%E7%90%86%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%89%E6%9D%83%E9%87%8D%E6%9E%84{/}?",
       "destination": "/posts/data-platform-memory-ownership/",
       "permanent": true
     },
     {
-      "source": "/posts/数据中台：数据库操作模块的内存治理与数据所有权重构/",
-      "destination": "/posts/data-platform-memory-ownership/",
-      "permanent": true
-    },
-    {
-      "source": "/posts/深入 dt-sql-parser 源码：如何在前端实现 SQL 解析和补全",
-      "destination": "/posts/dt-sql-parser-deep-dive/",
-      "permanent": true
-    },
-    {
-      "source": "/posts/深入 dt-sql-parser 源码：如何在前端实现 SQL 解析和补全/",
+      "source": "/posts/%E6%B7%B1%E5%85%A5%20dt-sql-parser%20%E6%BA%90%E7%A0%81%EF%BC%9A%E5%A6%82%E4%BD%95%E5%9C%A8%E5%89%8D%E7%AB%AF%E5%AE%9E%E7%8E%B0%20SQL%20%E8%A7%A3%E6%9E%90%E5%92%8C%E8%A1%A5%E5%85%A8{/}?",
       "destination": "/posts/dt-sql-parser-deep-dive/",
       "permanent": true
     }
