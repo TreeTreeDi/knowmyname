@@ -2,5 +2,67 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "astro",
   "buildCommand": "pnpm build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/posts/Claude Code Hooks：长期检查 AI 代码生成的 TypeScript 错误",
+      "destination": "/posts/claude-code-hooks-typescript/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/Claude Code Hooks：长期检查 AI 代码生成的 TypeScript 错误/",
+      "destination": "/posts/claude-code-hooks-typescript/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/streaming-markdown 三层 Memoization，Markdown 优化渲染速度",
+      "destination": "/posts/streaming-markdown-memoization/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/streaming-markdown 三层 Memoization，Markdown 优化渲染速度/",
+      "destination": "/posts/streaming-markdown-memoization/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/从 TFT & TTI 出发的前端分包理解：CJS&ESM、Vite 与 React Router 相关",
+      "destination": "/posts/code-splitting-tft-tti/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/从 TFT & TTI 出发的前端分包理解：CJS&ESM、Vite 与 React Router 相关/",
+      "destination": "/posts/code-splitting-tft-tti/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/拾遗：React 设计 从批处理到 useTransition",
+      "destination": "/posts/react-batching-to-usetransition/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/拾遗：React 设计 从批处理到 useTransition/",
+      "destination": "/posts/react-batching-to-usetransition/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/数据中台：数据库操作模块的内存治理与数据所有权重构",
+      "destination": "/posts/data-platform-memory-ownership/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/数据中台：数据库操作模块的内存治理与数据所有权重构/",
+      "destination": "/posts/data-platform-memory-ownership/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/深入 dt-sql-parser 源码：如何在前端实现 SQL 解析和补全",
+      "destination": "/posts/dt-sql-parser-deep-dive/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/深入 dt-sql-parser 源码：如何在前端实现 SQL 解析和补全/",
+      "destination": "/posts/dt-sql-parser-deep-dive/",
+      "permanent": true
+    }
+  ]
 }
