@@ -2,7 +2,7 @@
 
 Shane（TreeTreeDi）的个人博客：文章（按年分组）、作品、生活。首页顶部是一条实时 WebGPU 海面，整站底色和字色跟着北京时间的清晨 / 正午 / 日落 / 夜晚变。
 
-- 线上：<https://knowmyname.vercel.app>
+- 线上：<https://knowmyname.vercel.app>（Vercel 项目 `knowmyname`，Node 24.x，构建命令 `pnpm build`，见 `vercel.json`）
 - 仓库：<https://github.com/TreeTreeDi/knowmyname>（push 到 `main` 自动部署，其他分支自动出预览链接）
 
 ## 写一篇新文章（3 步）
@@ -88,7 +88,7 @@ scripts/  new-post.mjs · fonts.mjs · subset-fonts.py · screenshots.mjs · tex
 
 - **文章**：线上的 9 篇全部迁移，正文、日期、描述和图片都保留。图片仍然引用 `TreeTreeDi/my-image-here` 图床。
   - 另有一篇《算法 字符串操作 & KMP 解决问题》，旧站没有 frontmatter，也没有上线，这里作为 `draft: true` 保留。
-- **网址**：英文 slug 原样保留。6 个中文文件名的旧网址在 `src/data/redirects.json` 里做了 301 跳转到新的英文 slug。
+- **网址**：英文 slug 原样保留。6 个中文文件名的旧网址在 `src/data/redirects.json` 里做了 301 跳转到新的英文 slug。Vercel 上真正的 301 写在 `vercel.json` 的 `redirects` 里（由 redirects.json 生成，用百分号编码的路径匹配），改一处要同步另一处；Astro 生成的跳转页是本地和其他托管的兜底。
 - **作品**：CloudQuery（Now）、StreamFusion、Multi-Mode Selection、markdown-flow。
 - **生活**：10 张照片（其中 2 张 HEIC 已转成 JPG）。旧仓库里有一张星轨照片来自 antfu.me 模板，不是 Shane 的，没有迁移。
 - **首页**：简介和 GitHub 链接；页脚是 CC BY-NC-SA 4.0 © TreeTreeDi。
